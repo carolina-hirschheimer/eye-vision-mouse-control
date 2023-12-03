@@ -116,10 +116,6 @@ class HaarCascadeBlobCapture:
 
     def draw(self, source, keypoints, dest=None):
         try:
-            if keypoints == None:
-                print("No eye detection")
-            else:
-                print("YOU ARE LOOKING AT: ", keypoints[0].pt)
             if dest is None:
                 dest = source
             return cv2.drawKeypoints(
