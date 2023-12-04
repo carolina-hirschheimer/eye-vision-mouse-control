@@ -5,15 +5,12 @@ import numpy
 import cv2
 from cv2.data import haarcascades
 from settings import settings
-"""from gui.application_window import (
-    calibrate_top_left_bool,
-    calibrate_top_right_bool,
-    calibrate_bottom_left_bool,
-    calibrate_bottom_right_bool
-)"""
+import pyautogui
 
 logger = logging.getLogger(__name__)
-
+page_width = pyautogui.size().width
+page_height = pyautogui.size().height
+pyautogui.FAILSAFE = False
 
 class CV2Error(Exception):
     pass
@@ -163,11 +160,18 @@ class HaarCascadeBlobCapture:
                     elif 'Bottom Right' in line:
                         bottom_right = (x, y)
 
-                # Print the extracted coordinates
-                #print(f'Top Left: {top_left}')
-                #print(f'Top Right: {top_right}')
-                #print(f'Bottom Left: {bottom_left}')
-                #print(f'Bottom Right: {bottom_right}')
+                top = min(top_left[1], top_right[1])
+                bottom = max(bottom_right[1], bottom_left[1])
+                right = max(top_right[0], bottom_right[0])
+                left = min(top_left[0], bottom_left[0])
+
+                #Proportion from coordinates of eye tracker to window coordinates
+                ### (left, top) ---------- (0,0)
+                ### (right, bottom) ------ (page_width, page_height)
+
+                x_mouse = self.keypoints[0].pt[0] * page_width/right
+                y_mouse = self.keypoints[0].pt[1] * page_height/bottom
+                pyautogui.moveTo(x_mouse,y_mouse,duration=0.3)
 
             if dest is None:
                 dest = source
