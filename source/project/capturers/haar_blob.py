@@ -35,6 +35,8 @@ class HaarCascadeBlobCapture:
         self.previous_left_keypoints = None
         self.previous_right_keypoints = None
         self.keypoints = None
+        self.eyes_detected = False
+        self.blink_list = []
 
     def init_blob_detector(self):
         detector_params = cv2.SimpleBlobDetector_Params()
@@ -100,6 +102,8 @@ class HaarCascadeBlobCapture:
 
             if cut_brows:
                 return self._cut_eyebrows(left_eye), self._cut_eyebrows(right_eye)
+            
+            print("i am here")
             return left_eye, right_eye
 
     def blob_track(self, img, threshold, prev_area):
@@ -121,21 +125,21 @@ class HaarCascadeBlobCapture:
     def draw(self, source, keypoints, dest=None):
         self.keypoints = keypoints
         try:
-            if self.keypoints == None:
-                print("No eye detection")
-            else:
-                #print("YOU ARE LOOKING AT: ", self.keypoints[0].pt)
+            aspect_ratio_threshold = 0.6  # Adjust this threshold based on your experimentation
+            
 
-                """print(calibrate_top_left_bool)
-                print(calibrate_top_right_bool)
-                print(calibrate_bottom_left_bool)
-                print(calibrate_bottom_right_bool)
-                print("\n")"""
+            if self.keypoints == None:
+                print("No eye detection", str(self.eyes_detected))
+
+            else:
+                print("YOU ARE LOOKING AT: ", self.keypoints[0].pt, self.eyes_detected)
+                self.eyes_detected = True
 
                 # Open the text file
                 with open('calibration_screen_cords.txt', 'r') as file:
                     # Read lines from the file
                     lines = file.readlines()
+
 
                 # Initialize variables to store coordinates
                 top_left = None
@@ -171,17 +175,35 @@ class HaarCascadeBlobCapture:
 
                 x_mouse = self.keypoints[0].pt[0] * page_width/right
                 y_mouse = self.keypoints[0].pt[1] * page_height/bottom
-                pyautogui.moveTo(x_mouse,y_mouse,duration=0.3)
+                #pyautogui.moveTo(x_mouse,y_mouse,duration=0.3)
 
-            if dest is None:
-                dest = source
-            return cv2.drawKeypoints(
-                source,
-                self.keypoints,
-                dest,
-                (0, 0, 255),
-                cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS,
-            )
+                """aspect_ratio_threshold = 0.6  # Adjust this threshold based on your experimentation
+
+                if len(self.keypoints) == 1:
+                    aspect_ratio = 1.0  # Default aspect ratio (circle)
+
+                    if len(self.keypoints[0].pt) == 2:
+                        # Assuming self.keypoints[0].pt is a tuple containing (x, y)
+                        center = self.keypoints[0].pt
+                        # Fit an ellipse to the blob
+                        ellipse = cv2.fitEllipse(numpy.array([center], dtype=numpy.float32))
+                        major_axis = max(ellipse[1])
+                        minor_axis = min(ellipse[1])
+
+                        # Calculate the aspect ratio
+                        aspect_ratio = major_axis / minor_axis
+
+                    if aspect_ratio < aspect_ratio_threshold:
+                        print("Blink detected!")
+
+                        # Add your logic for handling a blink event here
+                        # For example, you might want to perform an action when a blink is detected
+                        # For now, let's print a message
+                        print("Performing blink action...")
+                else:
+                    # No eye detection or multiple eyes detected
+                    print("No blink detected or multiple eyes detected")"""
+
         except cv2.error as e:
             raise CV2Error(str(e))
 
@@ -202,6 +224,7 @@ class HaarCascadeBlobCapture:
             face_gray = cv2.cvtColor(face, cv2.COLOR_RGB2GRAY)
 
             left_eye, right_eye = self.detect_eyes(face_gray)
+
             if left_eye is not None:
                 left_key_points = self.blob_track(left_eye, l_threshold, self.previous_left_blob_area)
 
@@ -214,6 +237,20 @@ class HaarCascadeBlobCapture:
                 kp = right_key_points or self.previous_right_keypoints
                 right_eye = self.draw(right_eye, kp, frame)
                 self.previous_right_keypoints = kp
+
+            eye_detector = cv2.CascadeClassifier(haarcascades + "haarcascade_eye.xml")
+            eyes = eye_detector.detectMultiScale(face,1.3,5,minSize=(50,50))
+
+            if len(eyes) < 2 and self.eyes_detected == True:
+                self.blink_list.append("blink")
+                print("BLIIIIINK")
+
+            else:
+                self.blink_list = []
+
+            if len(self.blink_list) > 3:
+                
+                print("biiiiiiiiig blink")
 
             return frame, left_eye, right_eye
         except (cv2.error, CV2Error) as e:
