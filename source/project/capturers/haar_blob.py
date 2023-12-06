@@ -177,33 +177,6 @@ class HaarCascadeBlobCapture:
                 y_mouse = self.keypoints[0].pt[1] * page_height/bottom
                 #pyautogui.moveTo(x_mouse,y_mouse,duration=0.3)
 
-                """aspect_ratio_threshold = 0.6  # Adjust this threshold based on your experimentation
-
-                if len(self.keypoints) == 1:
-                    aspect_ratio = 1.0  # Default aspect ratio (circle)
-
-                    if len(self.keypoints[0].pt) == 2:
-                        # Assuming self.keypoints[0].pt is a tuple containing (x, y)
-                        center = self.keypoints[0].pt
-                        # Fit an ellipse to the blob
-                        ellipse = cv2.fitEllipse(numpy.array([center], dtype=numpy.float32))
-                        major_axis = max(ellipse[1])
-                        minor_axis = min(ellipse[1])
-
-                        # Calculate the aspect ratio
-                        aspect_ratio = major_axis / minor_axis
-
-                    if aspect_ratio < aspect_ratio_threshold:
-                        print("Blink detected!")
-
-                        # Add your logic for handling a blink event here
-                        # For example, you might want to perform an action when a blink is detected
-                        # For now, let's print a message
-                        print("Performing blink action...")
-                else:
-                    # No eye detection or multiple eyes detected
-                    print("No blink detected or multiple eyes detected")"""
-
         except cv2.error as e:
             raise CV2Error(str(e))
 
@@ -249,7 +222,7 @@ class HaarCascadeBlobCapture:
                 self.blink_list = []
 
             if len(self.blink_list) > 3:
-                
+                pyautogui.click(pyautogui.position())
                 print("biiiiiiiiig blink")
 
             return frame, left_eye, right_eye
