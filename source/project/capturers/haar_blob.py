@@ -36,7 +36,8 @@ class HaarCascadeBlobCapture:
         self.previous_right_keypoints = None
         self.keypoints = None
         self.eyes_detected = False
-        self.blink_list = []
+        self.one_blink_list = []
+        self.two_blink_list = []
 
     def init_blob_detector(self):
         detector_params = cv2.SimpleBlobDetector_Params()
@@ -214,16 +215,44 @@ class HaarCascadeBlobCapture:
             eye_detector = cv2.CascadeClassifier(haarcascades + "haarcascade_eye.xml")
             eyes = eye_detector.detectMultiScale(face,1.3,5,minSize=(50,50))
 
-            if len(eyes) < 2 and self.eyes_detected == True:
-                self.blink_list.append("blink")
-                print("BLIIIIINK")
+            if len(eyes) == 1 and self.eyes_detected == True:
+                self.one_blink_list.append("BLINK")
+                print("ONE BLINK")
+            else:
+                self.one_blink_list = []
+
+            if len(eyes) == 0 and self.eyes_detected == True:
+                self.two_blink_list.append("BLINK")
+                print("TWO BLINK")
+
+            else:
+                self.two_blink_list = []
+
+            if len(self.one_blink_list) > 3:
+                pyautogui.click(pyautogui.position())
+                print("LONG BLINK ==> LEFT CLICK")
+
+            if len(self.two_blink_list) > 3:
+                pyautogui.click(button='right', x=pyautogui.position()[0], y=pyautogui.position()[1])
+                print("LONG BLINK ==> RIGHT CLICK")
+
+            """if len(eyes) < 2 and self.eyes_detected == True:
+                self.blink_list.append("BLINK")
+                print("BLINK")
 
             else:
                 self.blink_list = []
 
-            if len(self.blink_list) > 3:
+            if len(self.blink_list) > 3 and len(self.blink_list) < 10:
                 pyautogui.click(pyautogui.position())
-                print("biiiiiiiiig blink")
+                print("LONG BLINK ==> LEFT CLICK")
+
+            elif len(self.blink) >= 10:
+                # left click 
+                #print"""
+
+
+
 
             return frame, left_eye, right_eye
         except (cv2.error, CV2Error) as e:
