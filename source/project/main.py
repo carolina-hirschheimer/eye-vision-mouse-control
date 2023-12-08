@@ -34,6 +34,12 @@ def get_args():
         choices=FRAME_SOURCES.keys(),
         help="If your camera has an unusual ID in the system, pass it in this argument. Use only if your frame-source is camera(default)",
     )
+    parser.add_argument(
+        "running_status_arg",
+        nargs="?",  # Make the argument optional
+        default=None,  # Default value if not provided
+        help="A custom argument for your logic",
+    )
 
     args = parser.parse_args()
 
@@ -48,7 +54,15 @@ if __name__ == "__main__":
     if args.camera_id and args.frame_source == "camera":
         frames_source_init_kwargs["cam_id"] = args.camera_id
 
-    capture = HaarCascadeBlobCapture()
+    
+    if args.running_status_arg not in ["control_click", "control_mouse", "control_both", "calibrate"]:
+        print("Invalid argument", args.running_status_arg)
+        sys.exit()
+
+    else:
+        print("Running Status:", args.running_status_arg)
+    capture = HaarCascadeBlobCapture(running_status = args.running_status_arg)
+
     
 
     app = QApplication(sys.argv)

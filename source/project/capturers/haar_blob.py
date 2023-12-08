@@ -6,7 +6,7 @@ import cv2
 from cv2.data import haarcascades
 from settings import settings
 import pyautogui
-
+import sys 
 logger = logging.getLogger(__name__)
 page_width = pyautogui.size().width
 page_height = pyautogui.size().height
@@ -29,7 +29,7 @@ class HaarCascadeBlobCapture:
     eye_detector = cv2.CascadeClassifier(haarcascades + "haarcascade_eye.xml")
     blob_detector = None
 
-    def __init__(self):
+    def __init__(self, running_status):
         self.previous_left_blob_area = 1
         self.previous_right_blob_area = 1
         self.previous_left_keypoints = None
@@ -38,6 +38,7 @@ class HaarCascadeBlobCapture:
         self.eyes_detected = False
         self.one_blink_list = []
         self.two_blink_list = []
+        self.running_status = running_status
 
     def init_blob_detector(self):
         detector_params = cv2.SimpleBlobDetector_Params()
@@ -174,9 +175,19 @@ class HaarCascadeBlobCapture:
                 ### (left, top) ---------- (0,0)
                 ### (right, bottom) ------ (page_width, page_height)
 
-                x_mouse = self.keypoints[0].pt[0] * page_width/right
-                y_mouse = self.keypoints[0].pt[1] * page_height/bottom
-                #pyautogui.moveTo(x_mouse,y_mouse,duration=0.3)
+                # page_width ----- right 
+                # x_mouse -------- x = self.keypoints[0].pt[0]
+ 
+                x_mouse = ((self.keypoints[0].pt[0]-left) * page_width)/(right-left) 
+                y_mouse = ((self.keypoints[0].pt[1]-top) * page_height)/(bottom-top) 
+                
+                #x_mouse = (page_width*self.keypoints[0].pt[0] - page_width*left) / (right-left)
+                #y_mouse = (page_height*self.keypoints[0].pt[1] - page_height*top) / (bottom-top)
+
+                if self.running_status == "calibrate":
+                    pass
+                elif self.running_status == "control_mouse" or self.running_status == "control_both":
+                    pyautogui.moveTo(x_mouse,y_mouse,duration=0.3)
 
         except cv2.error as e:
             raise CV2Error(str(e))
@@ -215,44 +226,29 @@ class HaarCascadeBlobCapture:
             eye_detector = cv2.CascadeClassifier(haarcascades + "haarcascade_eye.xml")
             eyes = eye_detector.detectMultiScale(face,1.3,5,minSize=(50,50))
 
-            if len(eyes) == 1 and self.eyes_detected == True:
-                self.one_blink_list.append("BLINK")
-                print("ONE BLINK")
-            else:
-                self.one_blink_list = []
+            if self.running_status == "calibrate":
+                    pass
+            elif self.running_status == "control_click" or self.running_status == "control_both":
+                if len(eyes) == 1 and self.eyes_detected == True:
+                    self.one_blink_list.append("BLINK")
+                    print("ONE BLINK")
+                else:
+                    self.one_blink_list = []
 
-            if len(eyes) == 0 and self.eyes_detected == True:
-                self.two_blink_list.append("BLINK")
-                print("TWO BLINK")
+                if len(eyes) == 0 and self.eyes_detected == True:
+                    self.two_blink_list.append("BLINK")
+                    print("TWO BLINK")
 
-            else:
-                self.two_blink_list = []
+                else:
+                    self.two_blink_list = []
 
-            if len(self.one_blink_list) > 3:
-                pyautogui.click(pyautogui.position())
-                print("LONG BLINK ==> LEFT CLICK")
+                if len(self.one_blink_list) > 3:
+                    pyautogui.click(pyautogui.position())
+                    print("LONG BLINK ==> LEFT CLICK")
 
-            if len(self.two_blink_list) > 3:
-                pyautogui.click(button='right', x=pyautogui.position()[0], y=pyautogui.position()[1])
-                print("LONG BLINK ==> RIGHT CLICK")
-
-            """if len(eyes) < 2 and self.eyes_detected == True:
-                self.blink_list.append("BLINK")
-                print("BLINK")
-
-            else:
-                self.blink_list = []
-
-            if len(self.blink_list) > 3 and len(self.blink_list) < 10:
-                pyautogui.click(pyautogui.position())
-                print("LONG BLINK ==> LEFT CLICK")
-
-            elif len(self.blink) >= 10:
-                # left click 
-                #print"""
-
-
-
+                if len(self.two_blink_list) > 3:
+                    pyautogui.click(button='right', x=pyautogui.position()[0], y=pyautogui.position()[1])
+                    print("LONG BLINK ==> RIGHT CLICK")
 
             return frame, left_eye, right_eye
         except (cv2.error, CV2Error) as e:
