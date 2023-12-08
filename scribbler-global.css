@@ -311,3 +311,15 @@ table td:first-child {
     transform: translate3d(0,0,0);
   }
 }
+
+.center-container {
+  text-align: center;
+}
+
+.rounded-image {
+  border-radius: 30px; /* Adjust the value to control the roundness of corners */
+  max-width: 100%; /* Ensure the image doesn't exceed the container width */
+  height: auto; /* Maintain the image's aspect ratio */
+  padding-bottom: 0;
+  margin-bottom: 0;
+}

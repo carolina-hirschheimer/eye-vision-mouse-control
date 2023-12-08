@@ -14,7 +14,7 @@
   <body>
     <div class="doc__bg"></div>
     <nav class="header">
-      <h1 class="logo">Scribbler <span class="logo__thin">Doc</span></h1>
+      <h1 class="logo">Mouseye</span></h1>
       <ul class="menu">
         <div class="menu__item toggle"><span></span></div>
         <li class="menu__item"><a href="" class="link link--dark"><i class="fa fa-github"></i> Github</a></li>
@@ -24,76 +24,142 @@
     <div class="wrapper">
       <aside class="doc__nav">
         <ul>
-          <li class="js-btn selected">Get Started</li>
+          <li class="js-btn selected">About Mouseye</li>
+          <li class="js-btn">Installation</li>
           <li class="js-btn">Configuration</li>
-          <li class="js-btn">Keybindings</li>
-          <li class="js-btn">Issues</li>
+          <li class="js-btn">Usage</li>
         </ul>
       </aside>
       <article class="doc__content">
         <section class="js-section">
-          <h3 class="section__title">Get Started</h3>
-          <p>Learn how to configure settings for Scribbler, such as your syntax highlighting preference and the default saving folder location.</p>
+          <h3 class="section__title">About Mouseye</h3>
+          <p>
+            Mouseye is an application used to help people with disabilities and limited body motion control their computer mouse through their eyes. 
+            The application captures eye movement to move the mouse across the screen, as well as different blinks for a right or left click. 
+          </p>
+          
+        </section>
+        <section class="js-section">
           <h3 class="section__title">Installation</h3>
-          <div class="code__block code__block--notabs">
-            <pre class="code code--block">
-              <code>
-                $ scribbler  ——config
-                  {
-                    “encryption”: true, 
-                    “highlighting“: true,
-                    “prettyTable”: false,
-                    “font”: [“Helvetica”, “sans-serif”],
-                    “folder”: “~/Desktop“
-                  }
+          <div class="tab__container">
+            <ul class="tab__menu">
+              <li class="tab" data-tab="linux">linux</li>
+              <li class="tab" data-tab="win">windows</li>
+              <li class="tab" data-tab="mac">mac</li>
+            </ul>
+            <pre class="nohighlight code">
+              <code class="tab__pane active mac">
+                  $ python3 -m venv venv <br>
+                  $ source venv/bin/activate <br>
+                  $ pip install poetry <br>
+                  $ poetry install <br>
+                  $ cd project <br>
+                  $ python main.py 
+              </code>
+              <code class="tab__pane linux">  
+                  $ python3 -m venv venv <br>
+                  $ source venv/bin/activate <br>
+                  $ pip install poetry <br>
+                  $ poetry install <br>
+                  $ cd project <br>
+                  $ python main.py
+              </code>
+              <code class="tab__pane win">
+                  $ python3 -m venv venv <br>
+                  $ venv\Scripts\activate.bat <br>
+                  $ pip install poetry <br>
+                  $ poetry install <br>
+                  $ cd project <br>
+                  $ python main.py 
               </code>
             </pre>
           </div>
         </section>
         <section class="js-section">
           <h3 class="section__title">Configuration</h3>
-          <p>Learn how to configure settings for Scribbler, such as your syntax highlighting preference and the default saving folder location.</p>
+          <p>After installing the required dependencies, you can execute the program in 4 different modes, displayed by the options below:</p>
           <table id="customers">
             <tr>
-              <th>Options</th>
-              <th>Value</th>
-              <th>Default</th>
+              <th>Mode</th>
+              <th>Functionality</th>
+              <th>Argument</th>
             </tr>
             <tr>
-              <td>encryption</td>
-              <td>encrypt all notes before saving. If turned on, it requires password to open the file.</td>
-              <td>false</td>
+              <td>Calibration</td>
+              <td>
+                Used to calibrate the corners of the page. In order to do so, you need to look at one of the 4 corners of the computer window and click
+                on the corresponding calibration button in the application interface. 
+              </td>
+              <td>calibrate</td>
             </tr>
             <tr>
-              <td>highlighting</td>
-              <td>Show syntax highlight on markdown text.</td>
-              <td>true</td>
+              <td>Mouse Control</td>
+              <td>
+                Only the mouse control is enabled, without the clicks. In order to move the mouse, you just need to look through the page at 
+                where you want the mouse to move to. 
+              </td>
+              <td>control_mouse</td>
             </tr>
             <tr>
-              <td>prettyTable</td>
-              <td>Render table with Scribbler’s pretty table style.</td>
-              <td>true</td>
+              <td>Click Control</td>
+              <td>
+                Only the click control in enabled, and the mouse control is still manual. In order to left-click the mouse, you need to 
+                blink with only one eye. In order to right-click the mouse, you need to blink with both eyes. It is important that you 
+                hold on to the blink for a couple of seconds, so that the application does not misidentify regular blinks as clicks. 
+              </td>
+              <td>control_click</td>
+            </tr>
+            <tr>
+              <td>Both Controls</td>
+              <td>Both the mouse and the click controls are enabled to the user according to the specifications above.</td>
+              <td>control_both</td>
             </tr>
           </table>
-          <p>Malis percipitur an pro. Pro aperiam persequeris at, at sonet sensibus mei, id mea postulant definiebas concludaturque. Id qui malis abhorreant, mazim melius quo et. At eam altera dolorum, case dicant lobortis ius te, ad vel affert oportere reprehendunt. Quo no verterem deseruisse, mea brute postea te, ne per tacimates suavitate vituperatoribus.</p>
-          <hr />
+
         </section>
         <section class="js-section">
-          <h3 class="section__title">Keybindings</h3>
-          <p>Lorem ipsum dolor sit amet, scripta tibique indoctum sit ei, mel inani aeterno ad. Facer oratio ex per. At eam movet verear, in sea brute patrioque disputando, usu nonumes torquatos an. Ex his quaerendum intellegebat, ut vel homero accusam. Eum at debet tibique, in vocibus temporibus adversarium sed. Porro verear eu vix, ne usu tation vituperata.</p>
-          <p>Malis percipitur an pro. Pro aperiam persequeris at, at sonet sensibus mei, id mea postulant definiebas concludaturque. Id qui malis abhorreant, mazim melius quo et. At eam altera dolorum, case dicant lobortis ius te, ad vel affert oportere reprehendunt. Quo no verterem deseruisse, mea brute postea te, ne per tacimates suavitate vituperatoribus.</p>
-          <p>Malis percipitur an pro. Pro aperiam persequeris at, at sonet sensibus mei, id mea postulant definiebas concludaturque. Id qui malis abhorreant, mazim melius quo et. At eam altera dolorum, case dicant lobortis ius te, ad vel affert oportere reprehendunt. Quo no verterem deseruisse, mea brute postea te, ne per tacimates suavitate vituperatoribus.</p>
-          <hr />
-        </section>
-        <section class="js-section">
-          <h3 class="section__title">Issues</h3>
-          <p>Lorem ipsum dolor sit amet, scripta tibique indoctum sit ei, mel inani aeterno ad. Facer oratio ex per. At eam movet verear, in sea brute patrioque disputando, usu nonumes torquatos an. Ex his quaerendum intellegebat, ut vel homero accusam. Eum at debet tibique, in vocibus temporibus adversarium sed. Porro verear eu vix, ne usu tation vituperata.</p>
-          <p>Malis percipitur an pro. Pro aperiam persequeris at, at sonet sensibus mei, id mea postulant definiebas concludaturque. Id qui malis abhorreant, mazim melius quo et. At eam altera dolorum, case dicant lobortis ius te, ad vel affert oportere reprehendunt. Quo no verterem deseruisse, mea brute postea te, ne per tacimates suavitate vituperatoribus.</p>
+          <h3 class="section__title">Usage</h3>
+          <p>
+            In order to use Mouseye, you need to first make sure your virtual environment is activated by running the following code: <br>
+          </p>
+          <p> .
+          </p>
+          <div class="tab__container">
+            <ul class="tab__menu">
+              <li class="tab" data-tab="linux">linux</li>
+              <li class="tab" data-tab="win">windows</li>
+              <li class="tab" data-tab="mac">mac</li>
+            </ul>
+            <pre class="nohighlight code">
+              <code class="tab__pane active mac">
+                  $ source venv/bin/activate 
+              </code>
+              <code class="tab__pane linux">  
+                  $ source venv/bin/activate
+              </code>
+              <code class="tab__pane win">
+                  $ venv\Scripts\activate.bat
+              </code>
+            </pre>
+          </div>
+          <p>
+            <br>Then, to start the application, go to the /source/project/ folder and run the main.py file, replacing the "[argument]" by one of the 
+            arguments presented in the table of the Configuration section based on the functionality you want to use.
+            <br>
+          </p>
+          <div class="tab__container">
+            <pre class="nohighlight code">
+              <code class="tab__pane active mac">
+                  $ cd source/project/ <br>
+                  $ python main.py [argument]
+              </code>
+            </pre>
+          </div>
         </section>
       </article>
     </div>
 
-    <footer class="footer">Scribbler is a free HTML template created exclusively for <a href="https://tympanus.net/codrops/" target="_blank" class="link link--light">Codrops</a>.</footer>
+    <footer class="footer">Access the project repository <a href="https://github.com/carolina-hirschheimer/eye-vision-mouse-control" target="_blank" class="link link--light">Here</a>.</footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script src="scribbler.js"></script>
