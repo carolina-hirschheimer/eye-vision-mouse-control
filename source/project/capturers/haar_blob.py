@@ -177,9 +177,10 @@ class HaarCascadeBlobCapture:
 
                 # page_width ----- right 
                 # x_mouse -------- x = self.keypoints[0].pt[0]
- 
-                x_mouse = ((self.keypoints[0].pt[0]-left) * page_width)/(right-left) 
-                y_mouse = ((self.keypoints[0].pt[1]-top) * page_height)/(bottom-top) 
+
+                margin = 0
+                x_mouse = ((self.keypoints[0].pt[0]-left) * (page_width-margin))/(right-left) + margin 
+                y_mouse = ((self.keypoints[0].pt[1]-top) * (page_height-margin))/(bottom-top) + margin 
                 
                 #x_mouse = (page_width*self.keypoints[0].pt[0] - page_width*left) / (right-left)
                 #y_mouse = (page_height*self.keypoints[0].pt[1] - page_height*top) / (bottom-top)
